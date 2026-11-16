@@ -1,9 +1,4 @@
-name: luna
-description: Women’s period‑tracking app with local‑first storage.
-publish_to: "none"
-version: 0.1.0+1
-environment:
-  sdk: '>=3.3.0 <4.0.0'
+# Add Supabase and dotenv dependencies
 
 dependencies:
   flutter:
@@ -24,7 +19,10 @@ dependencies:
   google_fonts: ^7.0.0
   flutter_svg: ^2.0.10
   local_auth: ^2.2.0
-  # testing
+  supabase_flutter: ^2.2.3
+  flutter_dotenv: ^5.0.2
+  encrypt: ^5.0.1
+  # optional: for testing
   mockito: ^5.4.4
   flutter_test:
     sdk: flutter
@@ -33,10 +31,3 @@ dependencies:
 
 dev_dependencies:
   flutter_lints: ^3.0.0
-
-flutter:
-  uses-material-design: true
-  assets:
-    - assets/images/
-    - assets/fonts/
-

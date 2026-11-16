@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luna</title>
+  <!-- Favicon: inline SVG data URI -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23e58fb0'/%3E%3Cstop offset='100%25' stop-color='%239d86e9'/%3E%3C/linearGradient%3E%3Cmask id='mask'%3E%3Ccircle cx='50' cy='50' r='30' fill='white'/%3E%3Ccircle cx='40' cy='40' r='15' fill='black'/%3E%3C/mask%3E%3C/svg%3E" type="image/svg+xml" />
+  <style>
+    :root {
+      --bg-light: #f7f3fc;
+      --surface-light: #ffffff;
+      --text-light: #241a3d;
+      --muted-light: #5f5578;
+      --border-light: #e3dbf2;
+      --accent-lavender: #9d86e9;
+      --accent-rose: #e58fb0;
+      --accent-gold: #f2c879;
+      --button-primary-light: #4b34a8;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-dark: #171129;
+        --surface-dark: #211936;
+        --text-dark: #f2edfb;
+        --muted-dark: #b5abcf;
+        --border-dark: #352b52;
+        --button-primary-dark: #c9b9ff;
+      }
+    }
+    /* Apply theme */
+    body {
+      margin: 0;
+      font-family: 'Nunito Sans', system-ui, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: var(--bg-dark);
+        color: var(--text-dark);
+      }
+    }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3 { font-family: 'Fraunces', serif; margin: 0; }
+    /* Layout helpers */
+    .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+    header, footer { display: flex; justify-content: space-between; align-items: center; }
+    nav a { margin-left: 1rem; font-weight: 600; }
+    /* Header */
+    header { padding: 1rem 0; }
+    .logo { display: flex; align-items: center; gap: 0.5rem; }
+    .logo svg { width: 32px; height: 32px; }
+    /* Hero */
+    .hero { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2rem; padding: 4rem 0; }
+    @media (min-width: 768px) { .hero { flex-direction: row; text-align: left; align-items: flex-start; } }
+    .hero-left { flex: 1; }
+    .hero-right { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 600; line-height: 1.2; }
+    .hero p { margin: 1rem 0; font-size: 1.125rem; color: var(--muted-light); }
+    @media (prefers-color-scheme: dark) { .hero p { color: var(--muted-dark); } }
+    .btn { display: inline-block; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; border: 2px solid transparent; transition: background 0.2s, border-color 0.2s; }
+    .btn-primary { background: var(--button-primary-light); color: white; }
+    @media (prefers-color-scheme: dark) { .btn-primary { background: var(--button-primary-dark); } }
+    .btn-outline { background: transparent; border-color: var(--accent-lavender); color: var(--accent-lavender); }
+    .btn-outline:hover { background: var(--accent-lavender); color: white; }
+    .buttons { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    /* Dot ring */
+    .dot-ring { width: 250px; height: 250px; position: relative; }
+    .dot {
+      width: 12px; height: 12px; border-radius: 50%; position: absolute; background: var(--accent-lavender);
+      opacity: 0; /* start hidden */
+    }
+    .dot[data-day="1"], .dot[data-day="2"], .dot[data-day="3"], .dot[data-day="4"], .dot[data-day="5"] { background: var(--accent-rose); }
+    .dot[data-day="12"], .dot[data-day="13"], .dot[data-day="14"], .dot[data-day="15"], .dot[data-day="16"] { background: var(--accent-gold); }
+    .dot[data-day="14"] { width: 18px; height: 18px; }
+    .dot-label { position: absolute; top: 110%; left: 50%; transform: translateX(-50%); font-size: 0.75rem; color: var(--muted-light); text-align: center; }
+    @media (prefers-color-scheme: dark) { .dot-label { color: var(--muted-dark); } }
+    /* Features */
+    .features { display: flex; flex-direction: column; gap: 2rem; padding: 4rem 0; }
+    @media (min-width: 768px) { .features { flex-direction: row; } }
+    .features h2 { flex: 0 0 200px; font-size: 2rem; }
+    .features-list { flex: 1; display: flex; flex-direction: column; gap: 1rem; border-left: 1px solid var(--border-light); padding-left: 1.5rem; }
+    @media (prefers-color-scheme: dark) { .features-list { border-color: var(--border-dark); } }
+    .feature-item { display: flex; flex-direction: column; }
+    .feature-item h3 { font-weight: 600; margin-bottom: 0.25rem; }
+    .feature-item p { margin: 0; color: var(--muted-light); }
+    @media (prefers-color-scheme: dark) { .feature-item p { color: var(--muted-dark); } }
+    /* Privacy card */
+    .privacy { background: var(--surface-light); border: 1px solid var(--border-light); border-radius: 0.75rem; padding: 2rem; margin: 4rem 0; }
+    @media (prefers-color-scheme: dark) { .privacy { background: var(--surface-dark); border-color: var(--border-dark); } }
+    .privacy-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+    @media (min-width: 600px) { .privacy-grid { flex-direction: row; } }
+    .privacy-item { flex: 1; text-align: center; }
+    .privacy-item h3 { font-weight: 600; margin-bottom: 0.5rem; }
+    .privacy-item p { margin: 0; color: var(--muted-light); }
+    @media (prefers-color-scheme: dark) { .privacy-item p { color: var(--muted-dark); } }
+    /* Disclaimer */
+    .disclaimer { font-size: 0.875rem; text-align: center; margin: 2rem 0; color: var(--muted-light); }
+    @media (prefers-color-scheme: dark) { .disclaimer { color: var(--muted-dark); } }
+    footer { padding: 2rem 0; font-size: 0.875rem; text-align: center; color: var(--muted-light); }
+    @media (prefers-color-scheme: dark) { footer { color: var(--muted-dark); } }
+    /* Focus outline for accessibility */
+    a:focus, button:focus { outline: 3px solid var(--accent-lavender); outline-offset: 2px; }
+    @media (prefers-color-scheme: dark) { a:focus, button:focus { outline-color: var(--accent-rose); } }
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      .dot { transition: none; }
+    }
+  </style>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="container">
+    <div class="logo">
+      <!-- Logo SVG -->
+      <svg role="img" aria-label="Luna logo" viewBox="0 0 100 100" width="48" height="48" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="var(--accent-rose)" />
+            <stop offset="100%" stop-color="var(--accent-lavender)" />
+          </linearGradient>
+          <mask id="mask">
+            <circle cx="50" cy="50" r="30" fill="white" />
+            <circle cx="40" cy="40" r="15" fill="black" />
+          </mask>
+        </defs>
+        <circle cx="50" cy="50" r="30" fill="url(#grad)" mask="url(#mask)" />
+      </svg>
+      <span style="font-size:1.5rem; font-weight:600; font-family:'Fraunces', serif;">Luna</span>
+    </div>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#privacy">Privacy</a>
+      <a href="app/index.html" aria-label="Open Luna app">Open Luna</a>
+    </nav>
+  </header>
+  <section class="hero container" id="hero">
+    <div class="hero-left">
+      <h1>Know your cycle. Keep it yours.</h1>
+      <p>Luna predicts your next period, tracks how you feel each day, and keeps everything on your own device.</p>
+      <div class="buttons">
+        <a href="app/index.html" class="btn btn-primary" aria-label="Open Luna app">Open Luna</a>
+        <a href="#features" class="btn btn-outline" aria-label="See how it works">See how it works</a>
+      </div>
+    </div>
+    <div class="hero-right" aria-label="Cycle day ring graphic">
+      <div class="dot-ring" aria-hidden="true">
+        <!-- Dots will be placed via JS -->
+      </div>
+      <svg aria-hidden="true" class="logo" style="position:absolute; width:80px; height:80px;" viewBox="0 0 100 100">
+        <defs>
+          <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="var(--accent-rose)" />
+            <stop offset="100%" stop-color="var(--accent-lavender)" />
+          </linearGradient>
+          <mask id="mask2">
+            <circle cx="50" cy="50" r="30" fill="white" />
+            <circle cx="40" cy="40" r="15" fill="black" />
+          </mask>
+        </defs>
+        <circle cx="50" cy="50" r="30" fill="url(#grad2)" mask="url(#mask2)" />
+      </svg>
+      <div class="dot-label" style="top:115%; left:50%; transform:translateX(-50%);">
+        <div>Day 14</div>
+        <div>Fertile window</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features container" id="features">
+    <h2>Features</h2>
+    <div class="features-list">
+      <div class="feature-item">
+        <h3>Predictions that learn</h3>
+        <p>Smart forecasts improve as you log more cycles.</p>
+      </div>
+      <div class="feature-item">
+        <h3>A daily log that takes a minute</h3>
+        <p>Quickly note mood, symptoms, and sleep.</p>
+      </div>
+      <div class="feature-item">
+        <h3>A calendar you can read at a glance</h3>
+        <p>Color‑coded days show periods and fertile windows.</p>
+      </div>
+      <div class="feature-item">
+        <h3>Insights that show your patterns</h3>
+        <p>Charts reveal trends in cycle length and symptoms.</p>
+      </div>
+      <div class="feature-item">
+        <h3>Reminders that stay gentle</h3>
+        <p>Soft in‑app alerts keep you on track.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="privacy container" id="privacy">
+    <h2>Privacy</h2>
+    <div class="privacy-grid">
+      <div class="privacy-item">
+        <h3>No ads, no trackers</h3>
+        <p>We never sell or share your data.</p>
+      </div>
+      <div class="privacy-item">
+        <h3>Stored on your device</h3>
+        <p>All information stays locally unless you export.</p>
+      </div>
+      <div class="privacy-item">
+        <h3>Export or delete anytime</h3>
+        <p>Take your data with you or wipe it clean.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="disclaimer container">
+    <p>Luna is not a medical device or a method of contraception. Talk to a healthcare professional about your health.</p>
+  </section>
+
+  <footer>
+    <p>© 2026 Luna</p>
+  </footer>
+
+  <script>
+    // Dot ring generation and simple fade‑in animation respecting prefers‑reduced‑motion
+    const ring = document.querySelector('.dot-ring');
+    const totalDays = 28;
+    const radius = 110; // radius from centre in percent of container half‑size
+    const centerX = 125; // half of dot-ring width (250/2)
+    const centerY = 125;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    for (let i = 1; i <= totalDays; i++) {
+      const angle = (i - 1) * (2 * Math.PI / totalDays) - Math.PI / 2;
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      dot.dataset.day = i;
+      dot.style.left = `${x}px`;
+      dot.style.top = `${y}px`;
+      if (!prefersReduced) {
+        dot.style.transition = 'opacity 0.5s ease-out';
+        dot.style.transitionDelay = `${i * 50}ms`;
+        requestAnimationFrame(() => { dot.style.opacity = '1'; });
+      } else {
+        dot.style.opacity = '1';
+      }
+      ring.appendChild(dot);
+    }
+  </script>
+</body>
+</html>

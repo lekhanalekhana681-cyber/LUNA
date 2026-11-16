@@ -1,0 +1,26 @@
+# Flutter/Dart specific
+.dart_tool/
+.packages
+.buildlog
+.pub/
+.pub-cache/
+.idea/
+android/app/build/
+ios/Pods/
+ios/Runner.xcodeproj/project.xcworkspace/
+build/
+# Generated files
+*.iml
+*.class
+*.log
+*.tmp
+*.temp
+# VS Code
+.vscode/
+# MacOS
+.DS_Store
+# Windows
+Thumbs.db
+# Env files (Supabase credentials)
+.env
+
